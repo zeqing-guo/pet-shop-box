@@ -28,7 +28,8 @@ App = {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      App.web3Provider = new web3.provider.HttpProvider('http://localhost:8545');
+      // App.web3Provider = new web3.provider.HttpProvider(process.env.RPC_URL);
+      App.web3Provider = new web3.provider.HttpProvider("http://ethnetj7t.southcentralus.cloudapp.azure.com:8545");
       web3 = new Web3(App.web3Provider);
     }
 
@@ -37,14 +38,14 @@ App = {
 
   initContract: function() {
     $.getJSON('Adoption.json', function(data) {
-      var AdoptionArtiface = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtiface);
-
-      App.contracts.Adoption.setProvider(App.web3Provider);
-
-      return App.markAdopted();
+      web3.eth.getAccounts(function(err, accounts) {
+        var account = accounts[0];
+        var AdoptionContract = web3.eth.contract(data['abi']);
+        var AdoptionContractInstance = AdoptionContract.at(data['address']);
+        App.contracts.Adoption = AdoptionContractInstance;
+        App.markAdopted(account);
+      });
     });
-
     return App.bindEvents();
   },
 
@@ -59,40 +60,37 @@ App = {
 
     var adoptionInstance;
 
-    web3.eth.getAccounts(function (error, accounts) {
-      if (error) {
-        console.log(error);
+    web3.eth.getAccounts(function(err, accounts) {
+      if (err) {
+        console.log(err);
       }
 
       var account = accounts[0];
 
-      App.contracts.Adoption.deployed().then(function (instance) {
-        adoptionInstance = instance;
-
-        return adoptionInstance.adopt(petId, { from: account });
-      }).then(function (result) {
-        return App.markAdopted();
-      }).catch(function (err) {
-        console.log(err.message);
-        });
+      var AdoptionContractInstance = App.contracts.Adoption;
+      AdoptionContractInstance.adopt(petId, { from: account }, function(err, res){
+        if (err) {
+          console.log(err);
+          return;
+        }
+        App.markAdopted(account);
+      });
     });
   },
 
-  markAdopted: function(adopters, account) {
-    var adoptionInstance;
-
-    App.contracts.Adoption.deployed().then(function (instance) {
-      adoptionInstance = instance;
-
-      return adoptionInstance.getAdopters.call();
-    }).then(function (adopters) {
+  markAdopted: function(account) {
+    var AdoptionContractInstance = App.contracts.Adoption;
+    AdoptionContractInstance.getAdopters.call(function(err, adopters) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(adopters);
       for (i = 0; i < adopters.length; i++) {
         if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
           $('.panel-pet').eq(i).find('button').text('Pending...').attr('disabled', true);
         }
       }
-    }).catch(function (err) {
-      console.log(err.message);
     });
   }
 
