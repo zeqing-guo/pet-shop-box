@@ -28,9 +28,7 @@ App = {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      // App.web3Provider = new web3.provider.HttpProvider(process.env.RPC_URL);
-      App.web3Provider = new web3.provider.HttpProvider("http://ethnetj7t.southcentralus.cloudapp.azure.com:8545");
-      web3 = new Web3(App.web3Provider);
+      document.body.innerHTML = "No web3 provider.";
     }
 
     return App.initContract();

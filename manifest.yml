@@ -2,4 +2,5 @@
 applications:
   - name: pet-shop
     buildpack: https://github.com/cloudfoundry/nodejs-buildpack
-    command: npm run dev
+    random-route: true
+    command: node web.js
