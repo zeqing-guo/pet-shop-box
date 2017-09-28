@@ -32,6 +32,7 @@ Once your account owns some Ether, you can create smart contract with the accoun
 
 1. Click "Add local file" in the upper left and choose `Adoption.sol` in contracts directory.
 2. Click "Run", switch `Environment` into `Injected Web3`, and click `Create` to deploy smart contract into private chain.
+![solidity broswer](src/images/solidity.png)
 3. Copy the contract address and paste it in `src/Adoption.json`.
 
 ## Usage
