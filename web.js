@@ -4,7 +4,6 @@ var os = require("os");
 var app = express();
 
 app.use(logfmt.requestLogger());
-app.use(express.static('build/contracts'));
 app.use(express.static('src'));
 
 var port = Number(process.env.VCAP_APP_PORT || process.env.PORT);

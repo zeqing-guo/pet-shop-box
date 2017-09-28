@@ -1,29 +1,49 @@
-# Pet Shop Truffle Box
+# Pet Shop
 
-This box has all you need to get started with our [Pet Shop tutorial](http://truffleframework.com/tutorials/pet-shop).
+Pet shop is modify from the [Pet Shop Box](http://truffleframework.com/tutorials/pet-shop).
 
-## Installation
+## Prerequisite
 
-1. Install truffle and an ethereum client. For local development, try EthereumJS TestRPC.
-    ```javascript
-    npm install -g truffle // Version 3.0.5+ required.
-    npm install -g ethereumjs-testrpc
-    ```
+### Install Matemask on Chrome Web Store
 
-2. Download box.
-    ```javascript
-    truffle unbox pet-shop
-    ```
+[MateMask](https://metamask.io/) is a Chrome Extension to connect to an Ethereum network. You can install this extension on [Chrome Web Store](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=chrome-ntp-icon).
 
-3. Compile and migrate the contracts.
-    ```javascript
-    truffle compile
-    truffle migrate
-    ```
+### Deploy Pet Shop Smart Contract on Private Chain
 
-4. Run the `liteserver` development server for front-end hot reloading. For now, smart contract changes must be manually recompiled and migrated.
-    ```javascript
-    npm run dev
-    ```
+#### Switch Your Matemask Endpoint to Private Chain
 
-**NOTE**: This box is not a complete dapp, but the starting point for the [Pet Shop tutorial](http://truffleframework.com/tutorials/pet-shop). You'll need to complete that for this to function.
+Once Matemask has being installed, we need to change it to connect the private chain we provisioned.
+
+![matemask](src/images/matemask.png)
+
+#### Allocate Ether to Your Ethereum Account
+
+Then you should to allocate some ethers to your Ethereum account in Matemask:
+
+1. Copy the address of Ethereum account in Matemask to which you want to transfer ether
+2. Get the URL of administrator page from the provision step when create private chain in Cloud Foundry, and go to the administrator page
+3. Paste your address in "Address of Recipient" and click "SUBMIT" button.
+
+![administrator page](src/images/administrator_page.png)
+
+#### Deploy Smart Contract
+
+Once your account owns some Ether, you can create smart contract with the account on your private chain. For this, we will use the [Broswer Solidity project](https://ethereum.github.io/browser-solidity/), which supports Matemask and allows you to deploy smart contract on private chain directly in your broswer.
+
+1. Click "Add local file" in the upper left and choose `Adoption.sol` in contracts directory.
+2. Click "Run", switch `Environment` into `Injected Web3`, and click `Create` to deploy smart contract into private chain.
+3. Copy the contract address and paste it in `src/Adoption.json`.
+
+## Usage
+
+```
+git clone https://github.com/zeqing-guo/pet-shop-box.git
+cd pet-shop-box
+cf push
+```
+
+After push the app to cloud foundry, you can open the URL in broswer.
+
+**Note:** you need to switch your Matemask to connect private chain before use pet shop.
+
+![pet shop](/src/images/pet_shop.png)
